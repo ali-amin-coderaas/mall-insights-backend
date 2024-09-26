@@ -1,5 +1,5 @@
-import validate from "../utils/validate.ts";
-import AccountSchemas from "./account.schema.ts";
+import validate from "../utils/validate";
+import AccountSchemas from "./account.schema";
 
 const validateAccountQuery = () => {
 	return validate(AccountSchemas.getAllAccounts, "query");

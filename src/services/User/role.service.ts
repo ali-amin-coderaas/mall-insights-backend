@@ -1,15 +1,19 @@
-import { prisma } from "../config.ts";
+import { prisma } from "../config";
 
 const RoleService = {
 	async getAllRoles() {
 		return await prisma.role.findMany({
-			deletedAt: null,
+			where: {
+				deletedAt: null,
+			},
 		});
 	},
 
 	async getAllPermissions() {
 		return await prisma.permission.findMany({
-			deletedAt: null,
+			where: {
+				deletedAt: null,
+			},
 		});
 	},
 };

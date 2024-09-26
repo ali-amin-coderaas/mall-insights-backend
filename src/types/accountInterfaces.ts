@@ -1,7 +1,7 @@
 export type Account = {
 	id: number;
 	name: string;
-	type_id: number;
+	typeId: number;
 	createdAt: Date;
 	updatedAt: Date;
 	deletedAt: Date | null;
@@ -14,3 +14,8 @@ export type AccountType = {
 	updatedAt: Date;
 	deletedAt: Date | null;
 };
+
+export type CreateAccount = Omit<
+	Account,
+	"id" | "createdAt" | "updatedAt" | "deletedAt"
+>;

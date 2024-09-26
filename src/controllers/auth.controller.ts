@@ -1,19 +1,17 @@
-import bodyParser from "body-parser";
-import dotenv from "dotenv";
+import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import UserService from "../services/User/user.service.ts";
-import { validatePassword } from "../utils/validatePassword.ts";
+import UserService from "../services/User/user.service";
+import { handleError, handleSuccess } from "../utils/responseHelper";
+import { validatePassword } from "../utils/validatePassword";
 
-dotenv.config();
-
-export const login = async (req, res) => {
+export const login = async (req: Request, res: Response) => {
 	const email = req.body.email;
 	const password = req.body.password;
 
 	console.log("Attempting to log in with email: ", email);
 
 	if (!email || !password) {
-		return res.status(400).json({ error: "Email and password are required" });
+		return handleError(res, 400, "Missing email or password", req, "Login");
 	}
 
 	try {
@@ -21,31 +19,37 @@ export const login = async (req, res) => {
 
 		if (!user) {
 			console.log("User not found with email: ", email);
-			return res.status(401).json({ error: "Invalid email or password" });
+			return handleError(res, 404, "User not found", req, "Login");
 		}
 
 		const isValidPassword = await validatePassword(password, user.password);
 
 		if (!isValidPassword) {
 			console.log("Invalid password for user with email: ", email);
-			return res.status(401).json({ error: "Invalid email or password" });
+			return handleError(res, 401, "Invalid password", req, "Login");
 		}
 
-		const token = jwt.sign(
-			{ id: user.id, email: user.email },
-			process.env.JWT_SECRET,
-			{
-				expiresIn: "1h",
-			}
-		);
+		const jwtSecret = process.env.JWT_SECRET;
+		if (!jwtSecret) {
+			console.error("JWT secret is not defined.");
+			return handleError(res, 500, "JWT secret is not defined", req, "Login");
+		}
+
+		const token = jwt.sign({ id: user.id, email: user.email }, jwtSecret, {
+			expiresIn: "1h",
+		});
 
 		console.log("Generated token for user with email: ", email);
 
-		return res.status(200).json({ token: token });
+		const responseData = {
+			items: [token],
+			pagination: null,
+			links: null,
+		};
+
+		return handleSuccess(res, 200, responseData, req, "Login");
 	} catch (error) {
 		console.error(error);
-		return res
-			.status(500)
-			.json({ error: "An error occurred while logging in" });
+		return handleError(res, 500, error, req, "Login");
 	}
 };

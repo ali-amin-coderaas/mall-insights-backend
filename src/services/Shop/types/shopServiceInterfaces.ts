@@ -1,4 +1,5 @@
-import { Industry, Shop } from "../../../types/shopInterfaces";
+import QueryString from "qs";
+import { CreateShop, Industry, Shop } from "../../../types/shopInterfaces";
 
 export type ShopServiceProps = {
 	getAllShops(
@@ -10,18 +11,12 @@ export type ShopServiceProps = {
 		order: string
 	): Promise<{ shops: Shop[]; totalItems: number }>;
 
-	getShopById(shopId: number, accountId: number): Promise<Shop>;
+	getShopById(shop_id: number, accountId: number): Promise<Shop | null>;
 
-	createShop(
-		accountId: number,
-		name: string,
-		businessName: string,
-		email: string,
-		industry_id: number
-	): Promise<Shop>;
-	updateShop(accountId: number, shopId: number, data: Shop): Promise<Shop>;
+	createShop(data: CreateShop): Promise<Shop>;
+	updateShop(accountId: number, shop_id: number, data: Shop): Promise<Shop>;
 
-	deleteShop(accountId: number, shopId: number): Promise<Shop>;
+	deleteShop(accountId: number, shop_id: number): Promise<Shop>;
 
-	getIndustries(): Promise<Industry>;
+	getIndustries(): Promise<Industry[]>;
 };

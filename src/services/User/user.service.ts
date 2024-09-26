@@ -2,23 +2,12 @@ import { prisma } from "../config";
 import { UserServiceProps } from "./types/userServiceinterfaces.js";
 
 const UserService: UserServiceProps = {
-	async registerUser(first_name, last_name, email, role_id, password) {
-		console.log("Attempting to register user with data: ", {
-			first_name,
-			last_name,
-			email,
-			role_id,
-			password,
-		});
+	async registerUser(firstName, lastName, email, roleId, password) {
+		const roleId = Number(roleId);
 		try {
 			const newUser = await prisma.user.create({
-				first_name,
-				last_name,
-				role_id,
-				email,
-				password,
+				data: { firstName, lastName, roleId: roleId, email, password },
 			});
-			console.log("User registered with id: ", newUser.id);
 			return newUser;
 		} catch (error) {
 			console.error("Error creating new user: ", error);
@@ -27,7 +16,17 @@ const UserService: UserServiceProps = {
 	},
 
 	async findUserByEmail(email) {
-		return await prisma.user.findOne({ where: { email: email } });
+		try {
+			const user = await prisma.user.findFirst({
+				where: { email },
+			});
+			if (!user) {
+				throw new Error(`User not found with email: ${email}`);
+			}
+			return user;
+		} catch (error) {
+			throw error;
+		}
 	},
 };
 

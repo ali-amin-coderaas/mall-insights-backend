@@ -14,7 +14,7 @@ const shopSchemas = {
 	}),
 
 	getShopById: Joi.object({
-		shopId: Joi.number().integer().required(),
+		shop_id: Joi.number().integer().required(),
 		accountId: Joi.number().integer().required(),
 	}),
 
@@ -28,7 +28,7 @@ const shopSchemas = {
 
 	updateShop: Joi.object({
 		accountId: Joi.number().integer().required(),
-		shopId: Joi.number().integer().required(),
+		shop_id: Joi.number().integer().required(),
 		data: Joi.object({
 			name: Joi.string().max(255).optional(),
 			businessName: Joi.string().max(255).optional(),

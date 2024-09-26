@@ -1,12 +1,16 @@
-import AccountService from "../services/Account/account.service.ts";
-import { handleError, handleSuccess } from "../utils/responseHelper.ts";
+import { Request, Response } from "express";
+import AccountService from "../services/Account/account.service";
+import { Account } from "../types/accountInterfaces";
+import { Data } from "../types/responseInterfaces"; // Assuming you have a Data interface
+import { handleError, handleSuccess } from "../utils/responseHelper";
 
-const getAll = async (req, res) => {
-	const searchQuery = req.query.q || "";
+// Fetch all accounts
+const getAll = async (req: Request, res: Response) => {
+	const searchQuery = (req.query.q as string) || "";
 	const page = Number(req.query.page) || 1;
 	const pageSize = Number(req.query.pageSize) || 10;
-	const sortBy = req.query.sortBy || "createdAt";
-	const order = req.query.order || "ASC";
+	const sortBy = (req.query.sortBy as string) || "createdAt";
+	const order = (req.query.order as string) || "ASC";
 
 	try {
 		const data = await AccountService.getAllAccounts(
@@ -17,21 +21,25 @@ const getAll = async (req, res) => {
 			order
 		);
 
-		const { items, totalItems, currentPage, totalPages } = data;
+		const { accounts, totalItems } = data;
 		const pagination = {
-			currentPage,
-			pageSize: data.pageSize,
+			currentPage: page,
+			pageSize: pageSize,
 			totalItems,
-			totalPages,
+			totalPages: Math.ceil(totalItems / pageSize),
 		};
 
-		return handleSuccess(
+		const responseData: Data<Account> = {
+			items: accounts,
+			pagination: pagination,
+			links: null,
+		};
+
+		return handleSuccess<Account>(
 			res,
 			200,
-			{ items },
+			responseData,
 			req,
-			pagination,
-			null,
 			"Fetch Accounts"
 		);
 	} catch (error) {
@@ -39,11 +47,12 @@ const getAll = async (req, res) => {
 	}
 };
 
-const getById = async (req, res) => {
+// Fetch account by ID
+const getById = async (req: Request, res: Response) => {
 	const { accountId } = req.params;
 
 	try {
-		const account = await AccountService.getAccountById(accountId);
+		const account = await AccountService.getAccountById(Number(accountId));
 
 		if (!account) {
 			return handleError(
@@ -54,84 +63,119 @@ const getById = async (req, res) => {
 				"Fetch Account"
 			);
 		}
-		return handleSuccess(res, 200, account, req, null, null, "Fetch Account");
+
+		const responseData: Data<Account> = {
+			items: [account],
+			pagination: null,
+			links: null,
+		};
+
+		return handleSuccess<Account>(res, 200, responseData, req, "Fetch Account");
 	} catch (error) {
 		return handleError(res, 500, error, req, "Fetch Account");
 	}
 };
-const create = async (req, res) => {
-	const { name, type } = req.body;
+
+const create = async (req: Request, res: Response) => {
+	const { name, typeId } = req.body;
+
+	const typeId = parseInt(typeId);
+
 	try {
-		const newAccountId = await AccountService.createAccount({ name, type });
-		return handleSuccess(
-			res,
-			201,
-			{ accountId: newAccountId },
-			req,
-			null,
-			null,
-			"Create Account"
-		);
+		const newAccountId = await AccountService.createAccount({
+			name,
+			typeId: typeId,
+		});
+
+		const responseData = {
+			items: [{ accountId: newAccountId }],
+			pagination: null,
+			links: null,
+		};
+
+		return handleSuccess(res, 201, responseData, req, "Create Account");
 	} catch (error) {
 		return handleError(res, 500, error, req, "Create Account");
 	}
 };
 
-const update = async (req, res) => {
+// Update account
+const update = async (req: Request, res: Response) => {
 	const { accountId } = req.params;
 	const fieldsToUpdate = req.body;
 
 	try {
-		const result = await AccountService.updateAccount(
+		const updatedAccount = await AccountService.updateAccount(
 			Number(accountId),
 			fieldsToUpdate
 		);
-		if (result.affectedRows === 0) {
-			return res.status(404).json({ error: "Account not found" });
+
+		if (!updatedAccount) {
+			return handleError(
+				res,
+				404,
+				{ message: "Account not found" },
+				req,
+				"Update Account"
+			);
 		}
-		return handleSuccess(res, 200, req.body, req, null, null, "Update Account");
+
+		const responseData = {
+			items: [updatedAccount],
+			pagination: null,
+			links: null,
+		};
+
+		return handleSuccess(res, 200, responseData, req, "Update Account");
 	} catch (error) {
 		return handleError(res, 500, error, req, "Update Account");
 	}
 };
 
-const destroy = async (req, res) => {
+// Delete account
+const destroy = async (req: Request, res: Response) => {
 	const { accountId } = req.params;
 	try {
-		const result = await AccountService.deleteAccount(accountId);
-		if (result.affectedRows === 0) {
-			return handleError(res, 404, "Account not found", req, "Delete Account");
+		const result = await AccountService.deleteAccount(Number(accountId));
+		if (!result) {
+			return handleError(
+				res,
+				404,
+				{ message: "Account not found" },
+				req,
+				"Delete Account"
+			);
 		}
-		return handleSuccess(
-			res,
-			200,
-			{ message: "Account deleted successfully" },
-			req,
-			null,
-			null,
-			"Delete Account"
-		);
+
+		const responseData = {
+			items: [{ message: "Account deleted successfully" }],
+			pagination: null,
+			links: null,
+		};
+
+		return handleSuccess(res, 200, responseData, req, "Delete Account");
 	} catch (error) {
 		return handleError(res, 500, error, req, "Delete Account");
 	}
 };
 
-const getAccountTypes = async (req, res) => {
+// Get account types
+const getAccountTypes = async (req: Request, res: Response) => {
 	try {
 		const accountTypes = await AccountService.getTypes();
-		return handleSuccess(
-			res,
-			200,
-			accountTypes,
-			req,
-			null,
-			null,
-			"Fetch Account Types"
-		);
+
+		const responseData = {
+			items: [accountTypes],
+			pagination: null,
+			links: null,
+		};
+
+		return handleSuccess(res, 200, responseData, req, "Fetch Account Types");
 	} catch (error) {
 		return handleError(res, 500, error, req, "Fetch Account Types");
 	}
 };
+
 export default {
 	getAccountTypes,
 	create,

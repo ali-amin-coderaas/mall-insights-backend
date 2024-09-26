@@ -23,15 +23,15 @@ CREATE TABLE `Permissions` (
 
 -- CreateTable
 CREATE TABLE `Role_Permission` (
-    `role_id` INTEGER NOT NULL,
+    `roleId` INTEGER NOT NULL,
     `permission_id` INTEGER NOT NULL,
     `deletedAt` DATETIME(3) NULL,
 
-    PRIMARY KEY (`role_id`, `permission_id`)
+    PRIMARY KEY (`roleId`, `permission_id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
-ALTER TABLE `Role_Permission` ADD CONSTRAINT `Role_Permission_role_id_fkey` FOREIGN KEY (`role_id`) REFERENCES `Roles`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `Role_Permission` ADD CONSTRAINT `Role_Permission_roleId_fkey` FOREIGN KEY (`roleId`) REFERENCES `Roles`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Role_Permission` ADD CONSTRAINT `Role_Permission_permission_id_fkey` FOREIGN KEY (`permission_id`) REFERENCES `Permissions`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

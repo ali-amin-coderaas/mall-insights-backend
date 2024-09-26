@@ -2,10 +2,10 @@
 CREATE TABLE `Shops` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
-    `business_name` VARCHAR(191) NOT NULL,
+    `businessName` VARCHAR(191) NOT NULL,
     `email` VARCHAR(191) NOT NULL,
-    `industry_id` INTEGER NOT NULL,
-    `account_id` INTEGER NOT NULL,
+    `industryId` INTEGER NOT NULL,
+    `accountId` INTEGER NOT NULL,
     `address` VARCHAR(191) NOT NULL,
     `phone` VARCHAR(191) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -27,7 +27,7 @@ CREATE TABLE `Shop_Industries` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
-ALTER TABLE `Shops` ADD CONSTRAINT `Shops_account_id_fkey` FOREIGN KEY (`account_id`) REFERENCES `Accounts`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `Shops` ADD CONSTRAINT `Shops_accountId_fkey` FOREIGN KEY (`accountId`) REFERENCES `Accounts`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Shops` ADD CONSTRAINT `Shops_industry_id_fkey` FOREIGN KEY (`industry_id`) REFERENCES `Shop_Industries`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `Shops` ADD CONSTRAINT `Shops_industryId_fkey` FOREIGN KEY (`industryId`) REFERENCES `Shop_Industries`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

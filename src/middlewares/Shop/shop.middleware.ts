@@ -1,5 +1,5 @@
-import validate from "../utils/validate.ts";
-import shopSchemas from "./shop.schema.ts";
+import validate from "../utils/validate";
+import shopSchemas from "./shop.schema";
 
 const validateShopQuery = () => {
 	return validate(shopSchemas.getAllShops, "query");

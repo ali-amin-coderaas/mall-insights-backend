@@ -1,4 +1,9 @@
-import { Account, AccountType } from "../../../types/accountInterfaces";
+import QueryString from "qs";
+import {
+	Account,
+	AccountType,
+	CreateAccount,
+} from "../../../types/accountInterfaces";
 
 export type AccountServiceProps = {
 	getAllAccounts: (
@@ -8,9 +13,9 @@ export type AccountServiceProps = {
 		sortBy: string,
 		order: string
 	) => Promise<{ accounts: Account[]; totalItems: number }>;
-	getAccountById: (id: number) => Promise<Account>;
-	createAccount: (data: Account) => Promise<Account>;
+	getAccountById: (id: number) => Promise<Account | null>;
+	createAccount: (data: CreateAccount) => Promise<Account>;
 	updateAccount: (id: number, data: Account) => Promise<Account>;
 	deleteAccount: (id: number) => Promise<Account>;
-	getTypes: () => Promise<AccountType>;
+	getTypes: () => Promise<AccountType[]>;
 };

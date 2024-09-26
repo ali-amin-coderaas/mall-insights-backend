@@ -6,7 +6,7 @@
 
 */
 -- DropForeignKey
-ALTER TABLE `account` DROP FOREIGN KEY `Account_type_id_fkey`;
+ALTER TABLE `account` DROP FOREIGN KEY `Account_typeId_fkey`;
 
 -- DropTable
 DROP TABLE `account`;
@@ -18,7 +18,7 @@ DROP TABLE `accounttype`;
 CREATE TABLE `Accounts` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
-    `type_id` INTEGER NOT NULL,
+    `typeId` INTEGER NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `deletedAt` DATETIME(3) NULL,
@@ -38,4 +38,4 @@ CREATE TABLE `Account_Types` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
-ALTER TABLE `Accounts` ADD CONSTRAINT `Accounts_type_id_fkey` FOREIGN KEY (`type_id`) REFERENCES `Account_Types`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `Accounts` ADD CONSTRAINT `Accounts_typeId_fkey` FOREIGN KEY (`typeId`) REFERENCES `Account_Types`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

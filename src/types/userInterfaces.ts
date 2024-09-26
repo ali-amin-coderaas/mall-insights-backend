@@ -1,14 +1,18 @@
+import QueryString from "qs";
 export type User = {
 	id: number;
-	first_name: string;
-	last_name: string;
+	firstName: string;
+	lastName: string;
 	email: string;
-	role_id: number;
+	roleId: number;
 	password: string;
 };
 export type Role = {
 	id: number;
 	name: string;
+	createdAt: Date;
+	updatedAt: Date;
+	deletedAt: Date | null;
 };
 
 export type Permission = {

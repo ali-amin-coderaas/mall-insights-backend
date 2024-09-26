@@ -5,28 +5,28 @@ const router = express.Router();
 
 router.get(
 	"/",
-	accountValidator.validateAccountQuery,
+	accountValidator.validateAccountQuery(),
 	accountController.getAll
 );
 router.get("/types", accountController.getAccountTypes);
 router.post(
 	"/",
-	accountValidator.validateCreateAccount,
+	accountValidator.validateCreateAccount(),
 	accountController.create
 );
 router.get(
 	"/:accountId",
-	accountValidator.validateAccountId,
+	accountValidator.validateAccountId(),
 	accountController.getById
 );
 router.put(
 	"/:accountId",
-	accountValidator.validateUpdateAccount,
+	accountValidator.validateUpdateAccount(),
 	accountController.update
 );
 router.delete(
 	"/:accountId",
-	accountValidator.validateAccountId,
+	accountValidator.validateAccountId(),
 	accountController.destroy
 );
 

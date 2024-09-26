@@ -1,5 +1,5 @@
-import validate from "../utils/validate.ts";
-import UserSchemas from "./user.schema.ts";
+import validate from "../utils/validate";
+import UserSchemas from "./user.schema";
 
 const validateCreateUser = () => {
 	return validate(UserSchemas.createUser);

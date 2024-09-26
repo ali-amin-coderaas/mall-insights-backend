@@ -10,7 +10,6 @@ const AccountService: AccountServiceProps = {
 				deletedAt: null,
 				name: {
 					contains: searchQuery,
-					mode: "insensitive",
 				},
 			},
 			orderBy: {
