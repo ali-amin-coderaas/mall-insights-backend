@@ -1,0 +1,166 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+//? User Management
+model User {
+  id         Int    @id @default(autoincrement()) // Primary key with auto-increment
+  first_name String
+  last_name  String
+  email      String @unique
+  role_id    Int
+  password   String
+
+  // Timestamps
+  createdAt DateTime @default(now()) // Automatically manages created timestamp
+  updatedAt DateTime @updatedAt // Automatically updates timestamp on changes
+
+  // Soft deletion 
+  deletedAt DateTime?
+
+  //Foreing Keys
+  role Role @relation(fields: [role_id], references: [id], onDelete: Cascade)
+
+  @@map("Users") // If table name is 'Users' instead of 'User'
+}
+
+model Role {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Soft deletion 
+  deletedAt DateTime?
+
+  // Relations
+  RolePermission RolePermission[]
+  User           User[]
+
+  @@map("Roles")
+}
+
+model Permission {
+  id     Int    @id @default(autoincrement())
+  name   String
+  action String
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Soft deletion 
+  deletedAt DateTime?
+
+  // Relations
+  RolePermission RolePermission[]
+
+  @@map("Permissions")
+}
+
+model RolePermission {
+  role_id       Int
+  permission_id Int
+
+  // Foreign keys
+  role       Role       @relation(fields: [role_id], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permission_id], references: [id], onDelete: Cascade)
+
+  // Soft deletion 
+  deletedAt DateTime?
+
+  // Composite primary key (since this is a junction table)
+  @@id([role_id, permission_id])
+  @@map("Role_Permission")
+}
+
+//? Account Management
+model Account {
+  id       Int    @id @default(autoincrement())
+  name     String
+  type_id Int
+
+  // Timestamps
+  createdAt DateTime @default(now()) // Automatically manages created timestamp
+  updatedAt DateTime @updatedAt // Automatically updates timestamp on changes
+
+  // Soft deletion 
+  deletedAt DateTime?
+
+  //Foreign Keys
+  type AccountType @relation(fields: [type_id], references: [id], onDelete: Cascade)
+  shop Shop[]
+
+  @@map("Accounts")
+
+}
+
+model AccountType {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Soft deletion 
+  deletedAt DateTime?
+
+  Account Account[]
+
+  @@map("Account_Types")
+}
+
+//? Shop Management
+model Shop{
+  id       Int    @id @default(autoincrement())
+  name     String
+  business_name String
+  email    String
+  industry_id Int
+  account_id Int
+  address   String
+  phone     String
+
+  // Timestamps
+  createdAt DateTime @default(now()) // Automatically manages created timestamp
+  updatedAt DateTime @updatedAt // Automatically updates timestamp on changes
+
+  // Soft deletion 
+  deletedAt DateTime?
+
+  //Relations
+  account Account @relation(fields: [account_id], references: [id], onDelete: Cascade)
+  industry ShopIndustry @relation(fields: [industry_id], references: [id], onDelete: Cascade)
+
+  @@map("Shops")
+}
+
+model ShopIndustry{
+  id   Int    @id @default(autoincrement())
+  name String
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Soft deletion 
+  deletedAt DateTime?
+
+  Shop Shop[]
+
+  @@map("Shop_Industries")
+}
