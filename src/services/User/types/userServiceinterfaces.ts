@@ -5,7 +5,7 @@ export type UserServiceProps = {
 		firstName: string,
 		lastName: string,
 		email: string,
-		roleId: string,
+		roleId: number,
 		password: string
 	): Promise<User>;
 

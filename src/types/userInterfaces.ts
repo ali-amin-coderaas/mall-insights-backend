@@ -1,4 +1,3 @@
-import QueryString from "qs";
 export type User = {
 	id: number;
 	firstName: string;
@@ -6,6 +5,9 @@ export type User = {
 	email: string;
 	roleId: number;
 	password: string;
+	createdAt: Date;
+	updatedAt: Date;
+	deletedAt: Date | null;
 };
 export type Role = {
 	id: number;
@@ -19,6 +21,9 @@ export type Permission = {
 	id: number;
 	name: string;
 	action: string;
+	createdAt: Date;
+	updatedAt: Date;
+	deletedAt: Date | null;
 };
 
 export type AuthResponse = {

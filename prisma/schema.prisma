@@ -15,8 +15,8 @@ datasource db {
 
 //? User Management
 model User {
-  id        Int     @id @default(autoincrement()) // Primary key with auto-increment
-  firstName String?
+  id        Int    @id @default(autoincrement()) // Primary key with auto-increment
+  firstName String
   lastName  String
   email     String
   roleId    Int
@@ -31,7 +31,6 @@ model User {
 
   //Foreing Keys
   role Role @relation(fields: [roleId], references: [id])
-
 }
 
 model Role {
@@ -64,7 +63,6 @@ model Permission {
 
   // Relations
   RolePermission RolePermission[]
-
 }
 
 model RolePermission {
@@ -78,7 +76,7 @@ model RolePermission {
   // Soft deletion 
   deletedAt DateTime?
 
-  // Composite primary key (since this is a junction table)
+  // Composite primary key (since this is a junction tabl)
   @@id([roleId, permission_id])
 }
 
@@ -98,7 +96,6 @@ model Account {
   //Foreign Keys
   type AccountType @relation(fields: [typeId], references: [id])
   shop Shop[]
-
 }
 
 model AccountType {
@@ -113,7 +110,6 @@ model AccountType {
   deletedAt DateTime?
 
   accounts Account[]
-
 }
 
 //? Shop Management
@@ -137,7 +133,6 @@ model Shop {
   //Relations
   account  Account      @relation(fields: [accountId], references: [id])
   industry ShopIndustry @relation(fields: [industryId], references: [id])
-
 }
 
 model ShopIndustry {
@@ -152,5 +147,4 @@ model ShopIndustry {
   deletedAt DateTime?
 
   shops Shop[]
-
 }

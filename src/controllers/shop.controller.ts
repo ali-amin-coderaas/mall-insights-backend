@@ -46,10 +46,8 @@ const getShops = async (req: Request, res: Response) => {
 };
 
 const createShop = async (req: Request, res: Response) => {
-	const { accountId } = req.params;
+	let accountId = parseInt(req.params.accountId);
 	const { name, businessName, email, industryId, address, phone } = req.body;
-
-	const accountId = Number(accountId);
 
 	try {
 		const newShop = await ShopService.createShop({
@@ -59,7 +57,7 @@ const createShop = async (req: Request, res: Response) => {
 			industryId,
 			address,
 			phone,
-			accountId: accountId,
+			accountId,
 		});
 		const responseData: Data<Shop> = {
 			items: [newShop],

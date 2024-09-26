@@ -3,7 +3,7 @@ import { UserServiceProps } from "./types/userServiceinterfaces.js";
 
 const UserService: UserServiceProps = {
 	async registerUser(firstName, lastName, email, roleId, password) {
-		const roleId = Number(roleId);
+		roleId = Number(roleId);
 		try {
 			const newUser = await prisma.user.create({
 				data: { firstName, lastName, roleId: roleId, email, password },

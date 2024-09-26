@@ -77,14 +77,13 @@ const getById = async (req: Request, res: Response) => {
 };
 
 const create = async (req: Request, res: Response) => {
-	const { name, typeId } = req.body;
-
-	const typeId = parseInt(typeId);
+	let { name, typeId } = req.body;
+	typeId = parseInt(typeId);
 
 	try {
 		const newAccountId = await AccountService.createAccount({
 			name,
-			typeId: typeId,
+			typeId,
 		});
 
 		const responseData = {
