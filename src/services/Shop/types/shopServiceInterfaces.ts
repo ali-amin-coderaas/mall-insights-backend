@@ -11,12 +11,12 @@ export type ShopServiceProps = {
 		order: string
 	): Promise<{ shops: Shop[]; totalItems: number }>;
 
-	getShopById(shop_id: number, accountId: number): Promise<Shop | null>;
+	getShopById(shopId: number, accountId: number): Promise<Shop | null>;
 
 	createShop(data: CreateShop): Promise<Shop>;
-	updateShop(accountId: number, shop_id: number, data: Shop): Promise<Shop>;
+	updateShop(accountId: number, shopId: number, data: Shop): Promise<Shop>;
 
-	deleteShop(accountId: number, shop_id: number): Promise<Shop>;
+	deleteShop(accountId: number, shopId: number): Promise<Shop>;
 
 	getIndustries(): Promise<Industry[]>;
 };

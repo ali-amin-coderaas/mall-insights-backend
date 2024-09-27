@@ -11,7 +11,7 @@ router.get(
 router.get("/industries", shopController.getShopIndustries);
 
 router.get(
-	"/:accountId/shops/:shop_id",
+	"/:accountId/shops/:shopId",
 	shopValidator.validateShopId(),
 	shopController.getShop
 );
@@ -21,12 +21,12 @@ router.post(
 	shopController.createShop
 );
 router.put(
-	"/:accountId/shops/:shop_id",
+	"/:accountId/shops/:shopId",
 	shopValidator.validateUpdateShop(),
 	shopController.updateShopById
 );
 router.delete(
-	"/:accountId/shops/:shop_id",
+	"/:accountId/shops/:shopId",
 	shopValidator.validateShopId(),
 	shopController.deleteShopById
 );

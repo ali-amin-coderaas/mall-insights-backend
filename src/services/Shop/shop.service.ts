@@ -34,11 +34,11 @@ const ShopService: ShopServiceProps = {
 		};
 	},
 
-	async getShopById(shop_id, accountId) {
+	async getShopById(shopId, accountId) {
 		return await prisma.shop.findUnique({
 			where: {
 				accountId: accountId,
-				id: shop_id,
+				id: shopId,
 			},
 		});
 	},
@@ -47,20 +47,20 @@ const ShopService: ShopServiceProps = {
 		return await prisma.shop.create({ data });
 	},
 
-	async updateShop(accountId, shop_id, data) {
+	async updateShop(accountId, shopId, data) {
 		return await prisma.shop.update({
 			where: {
-				id: shop_id,
+				id: shopId,
 				accountId: accountId,
 			},
 			data,
 		});
 	},
 
-	async deleteShop(accountId, shop_id) {
+	async deleteShop(accountId, shopId) {
 		return await prisma.shop.update({
 			where: {
-				id: shop_id,
+				id: shopId,
 				accountId: accountId,
 			},
 			data: {

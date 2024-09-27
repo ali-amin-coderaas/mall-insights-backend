@@ -71,11 +71,11 @@ const createShop = async (req: Request, res: Response) => {
 	}
 };
 const getShop = async (req: Request, res: Response) => {
-	const { accountId, shop_id } = req.params;
+	const { accountId, shopId } = req.params;
 	try {
 		const shop = await ShopService.getShopById(
 			Number(accountId),
-			Number(shop_id)
+			Number(shopId)
 		);
 
 		const responseData: Data<Shop | null> = {
@@ -94,7 +94,7 @@ const getShop = async (req: Request, res: Response) => {
 };
 
 const updateShopById = async (req: Request, res: Response) => {
-	const { shop_id, accountId } = req.params;
+	const { shopId, accountId } = req.params;
 	const fieldsToUpdate = req.body;
 
 	try {
@@ -104,7 +104,7 @@ const updateShopById = async (req: Request, res: Response) => {
 
 		const updatedShop = await ShopService.updateShop(
 			Number(accountId),
-			Number(shop_id),
+			Number(shopId),
 			fieldsToUpdate
 		);
 
@@ -125,11 +125,11 @@ const updateShopById = async (req: Request, res: Response) => {
 };
 
 const deleteShopById = async (req: Request, res: Response) => {
-	const { accountId, shop_id } = req.params;
+	const { accountId, shopId } = req.params;
 	try {
 		const result = await ShopService.deleteShop(
 			Number(accountId),
-			Number(shop_id)
+			Number(shopId)
 		);
 
 		const responseData = {

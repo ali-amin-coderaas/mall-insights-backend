@@ -4,7 +4,9 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"dev": "npx tsc && nodemon dist/app.js"
+		"start": "npx tsc && nodemon dist/app.js",
+		"dev": "nodemon app.ts",
+		"seed": "ts-node prisma/seed.ts"
 	},
 	"keywords": [],
 	"author": "",

@@ -1,5 +1,0 @@
--- AlterTable
-ALTER TABLE `users` ALTER COLUMN `roleId` DROP DEFAULT;
-
--- AddForeignKey
-ALTER TABLE `Users` ADD CONSTRAINT `Users_roleId_fkey` FOREIGN KEY (`roleId`) REFERENCES `Roles`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

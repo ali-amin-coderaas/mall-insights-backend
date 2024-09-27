@@ -19,7 +19,6 @@ model User {
   firstName String
   lastName  String
   email     String
-  roleId    Int
   password  String
 
   // Timestamps
@@ -30,7 +29,8 @@ model User {
   deletedAt DateTime?
 
   //Foreing Keys
-  role Role @relation(fields: [roleId], references: [id])
+  UserRole    UserRole[]
+  UserAccount UserAccount[]
 }
 
 model Role {
@@ -46,13 +46,12 @@ model Role {
 
   // Relations
   RolePermission RolePermission[]
-  User           User[]
+  UserRole       UserRole[]
 }
 
 model Permission {
-  id     Int    @id @default(autoincrement())
-  name   String
-  action String
+  id   Int    @id @default(autoincrement())
+  name String
 
   // Timestamps
   createdAt DateTime @default(now())
@@ -66,18 +65,46 @@ model Permission {
 }
 
 model RolePermission {
-  roleId        Int
-  permission_id Int
+  roleId       Int
+  permissionId Int
 
   // Foreign keys
   role       Role       @relation(fields: [roleId], references: [id])
-  permission Permission @relation(fields: [permission_id], references: [id])
+  permission Permission @relation(fields: [permissionId], references: [id])
 
   // Soft deletion 
   deletedAt DateTime?
 
   // Composite primary key (since this is a junction tabl)
-  @@id([roleId, permission_id])
+  @@id([roleId, permissionId])
+}
+
+model UserRole {
+  userId Int
+  roleId Int
+
+  // Foreign keys
+  role Role @relation(fields: [roleId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+
+  // Soft deletion 
+  deletedAt DateTime?
+
+  @@id([roleId, userId])
+}
+
+model UserAccount {
+  userId    Int
+  accountId Int
+
+  // Foreign keys
+  user    User    @relation(fields: [userId], references: [id])
+  account Account @relation(fields: [accountId], references: [id])
+
+  // Soft deletion 
+  deletedAt DateTime?
+
+  @@id([userId, accountId])
 }
 
 //? Account Management
@@ -94,8 +121,9 @@ model Account {
   deletedAt DateTime?
 
   //Foreign Keys
-  type AccountType @relation(fields: [typeId], references: [id])
-  shop Shop[]
+  type        AccountType   @relation(fields: [typeId], references: [id])
+  shops       Shop[]
+  UserAccount UserAccount[]
 }
 
 model AccountType {
@@ -147,4 +175,33 @@ model ShopIndustry {
   deletedAt DateTime?
 
   shops Shop[]
+}
+
+model Transaction {
+  id             Int      @id @default(autoincrement())
+  amount         Int
+  dateTime       DateTime
+  typeId         Int
+  shopId         Int
+  isModifiedFrom Int?
+  isModifiedTo   Int?
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Soft deletion 
+  deletedAt DateTime?
+}
+
+model SaleType {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Soft deletion 
+  deletedAt DateTime?
 }
