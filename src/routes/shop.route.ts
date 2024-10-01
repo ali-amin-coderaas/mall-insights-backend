@@ -19,8 +19,7 @@ router.get(
 	"/:accountId/shops/:shopId",
 	AccountMiddleware.isAccountFound,
 
-	validate(shopSchemas.accountId, "params"),
-	validate(shopSchemas.shopId, "params"),
+	validate(shopSchemas.getShop, "params"),
 	shopController.getShop
 );
 router.post(
@@ -35,7 +34,7 @@ router.put(
 	"/:accountId/shops/:shopId",
 	AccountMiddleware.isAccountFound,
 	validate(shopSchemas.accountId, "params"),
-	validate(shopSchemas.shopId, "params"),
+	validate(shopSchemas.getShop, "params"),
 	validate(shopSchemas.updateShop, "params"),
 	shopController.updateShopById
 );

@@ -1,7 +1,7 @@
 import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
-import express from "express";
+import express, { application } from "express";
 import authenticateToken from "./src/middlewares/Auth/auth.middleware";
 import accountRouter from "./src/routes/account.route";
 import authRouter from "./src/routes/auth.route";
@@ -20,6 +20,7 @@ app.set("view engine", "pug");
 app.set("views", "./views");
 
 // for parsing application/json
+app.use(express.json());
 app.use(bodyParser.json());
 
 // for parsing application/xwww-

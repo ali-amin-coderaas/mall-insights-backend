@@ -29,8 +29,8 @@ model User {
   deletedAt DateTime?
 
   //Foreing Keys
-  UserRole    UserRole[]
-  UserAccount UserAccount[]
+  userRole    UserRole[]
+  userAccount UserAccount[]
 }
 
 model Role {
@@ -45,8 +45,8 @@ model Role {
   deletedAt DateTime?
 
   // Relations
-  RolePermission RolePermission[]
-  UserRole       UserRole[]
+  rolePermission RolePermission[]
+  userRole       UserRole[]
 }
 
 model Permission {
@@ -61,7 +61,7 @@ model Permission {
   deletedAt DateTime?
 
   // Relations
-  RolePermission RolePermission[]
+  rolePermission RolePermission[]
 }
 
 model RolePermission {
@@ -123,7 +123,7 @@ model Account {
   //Foreign Keys
   type        AccountType   @relation(fields: [typeId], references: [id])
   shops       Shop[]
-  UserAccount UserAccount[]
+  userAccount UserAccount[]
 }
 
 model AccountType {
@@ -159,8 +159,9 @@ model Shop {
   deletedAt DateTime?
 
   //Relations
-  account  Account      @relation(fields: [accountId], references: [id])
-  industry ShopIndustry @relation(fields: [industryId], references: [id])
+  account      Account       @relation(fields: [accountId], references: [id])
+  industry     ShopIndustry  @relation(fields: [industryId], references: [id])
+  transactions Transaction[]
 }
 
 model ShopIndustry {
@@ -183,7 +184,6 @@ model Transaction {
   dateTime       DateTime
   typeId         Int
   shopId         Int
-  accountId      Int
   isModifiedFrom Int?
   isModifiedTo   Int?
 
@@ -193,6 +193,9 @@ model Transaction {
 
   // Soft deletion 
   deletedAt DateTime?
+
+  shop     Shop      @relation(fields: [shopId], references: [id])
+  saleType SaleType? @relation(fields: [typeId], references: [id])
 }
 
 model SaleType {
@@ -204,5 +207,6 @@ model SaleType {
   updatedAt DateTime @updatedAt
 
   // Soft deletion 
-  deletedAt DateTime?
+  deletedAt    DateTime?
+  transactions Transaction[]
 }

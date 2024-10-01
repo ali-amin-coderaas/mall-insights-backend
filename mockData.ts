@@ -82,20 +82,17 @@ const mockShops: CreateShop[] = [
 const mockTransactions: CreateTransaction[] = [
 	{
 		amount: 200,
-		accountId: 1,
 		typeId: 1,
 		shopId: 1,
 		dateTime: new Date(),
 	},
 	{
 		amount: 100,
-		accountId: 2,
 		typeId: 2,
 		shopId: 2,
 		dateTime: new Date(),
 	},
 	{
-		accountId: 3,
 		shopId: 3,
 		amount: 300,
 		typeId: 2,

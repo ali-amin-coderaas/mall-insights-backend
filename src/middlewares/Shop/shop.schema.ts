@@ -9,6 +9,11 @@ const shopSchemas = {
 	shopId: Joi.object({
 		shopId: Joi.number().integer().required(),
 	}),
+
+	getShop: Joi.object({
+		accountId: Joi.number().integer().required(),
+		shopId: Joi.number().integer().required(),
+	}),
 	getAllShops: Joi.object({
 		page: Joi.number().integer().min(1).default(1),
 		pageSize: Joi.number().integer().min(1).default(10),

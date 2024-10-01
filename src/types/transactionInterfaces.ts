@@ -1,7 +1,6 @@
 export interface Transaction {
 	id: number;
 	amount: number;
-	accountId: number;
 	typeId: number;
 	shopId: number;
 	isModifiedFrom: number;

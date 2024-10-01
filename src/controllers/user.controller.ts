@@ -7,18 +7,33 @@ import { Role, User } from "../types/userInterfaces";
 import { handleError, handleSuccess } from "../utils/responseHelper";
 
 export const register = async (req: Request, res: Response) => {
-	console.log("Attempting to register user with data: ", req.body);
-	const { firstName, lastName, roleId, email, password } = req.body;
+	const firstName: string = req.body.firstName;
+	const lastName: string = req.body.lastName;
+	const email: string = req.body.email;
+	const password: string = req.body.password;
+	const roleId: number = req.body.roleId;
 
 	try {
 		const saltRounds = 10;
 		const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+		//make sure email is unique
+		const existingUser = await UserService.findUserByEmail(email);
+		if (existingUser) {
+			return handleError(
+				res,
+				409,
+				"Email already in use",
+				req,
+				"Register User"
+			);
+		}
 		const newUser = await UserService.registerUser(
 			firstName,
 			lastName,
-			roleId,
 			email,
-			hashedPassword
+			hashedPassword,
+			roleId
 		);
 
 		const responseData: Data<User> = {
@@ -26,10 +41,9 @@ export const register = async (req: Request, res: Response) => {
 			pagination: null,
 			links: null,
 		};
-		console.log("User registered with id: ", newUser);
 		return handleSuccess<User>(res, 201, responseData, req, "Register User");
 	} catch (error) {
-		console.error("Error registering user", error);
+		console.error("Error registering new user: ", error);
 		return handleError(res, 500, error, req, "Register User");
 	}
 };

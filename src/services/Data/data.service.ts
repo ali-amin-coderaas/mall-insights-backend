@@ -8,7 +8,9 @@ const DataServices = {
 	) {
 		return await prisma.transaction.findMany({
 			where: {
-				accountId: accountId,
+				shop: {
+					accountId: accountId,
+				},
 				dateTime: {
 					gte: fromDate,
 					lte: toDate,
@@ -25,7 +27,9 @@ const DataServices = {
 	) {
 		return await prisma.transaction.findMany({
 			where: {
-				accountId: accountId,
+				shop: {
+					accountId: accountId,
+				},
 				shopId: shopId,
 				dateTime: {
 					gte: fromDate,

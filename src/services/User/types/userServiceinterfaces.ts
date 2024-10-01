@@ -5,8 +5,8 @@ export type UserServiceProps = {
 		firstName: string,
 		lastName: string,
 		email: string,
-		roleId: number,
-		password: string
+		password: string,
+		roleId: number
 	): Promise<User>;
 
 	findUserByEmail(email: string): Promise<User>;

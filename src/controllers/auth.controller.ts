@@ -5,41 +5,36 @@ import { handleError, handleSuccess } from "../utils/responseHelper";
 import { validatePassword } from "../utils/validatePassword";
 
 export const login = async (req: Request, res: Response) => {
-	const email = req.body.email;
-	const password = req.body.password;
-
-	console.log("Attempting to log in with email: ", email);
+	const { email, password } = req.body;
 
 	if (!email || !password) {
 		return handleError(res, 400, "Missing email or password", req, "Login");
 	}
 
 	try {
-		const user = await UserService.findUserByEmail(email);
+		const foundUser = await UserService.findUserByEmail(email);
 
-		if (!user) {
-			console.log("User not found with email: ", email);
+		if (!foundUser) {
 			return handleError(res, 404, "User not found", req, "Login");
 		}
 
-		const isValidPassword = await validatePassword(password, user.password);
+		const isPasswordValid = await validatePassword(
+			password,
+			foundUser.password
+		);
 
-		if (!isValidPassword) {
-			console.log("Invalid password for user with email: ", email);
+		if (!isPasswordValid) {
 			return handleError(res, 401, "Invalid password", req, "Login");
 		}
 
-		const jwtSecret = process.env.JWT_SECRET;
-		if (!jwtSecret) {
-			console.error("JWT secret is not defined.");
+		const secret = process.env.JWT_SECRET;
+		if (!secret) {
 			return handleError(res, 500, "JWT secret is not defined", req, "Login");
 		}
 
-		const token = jwt.sign({ id: user.id, email: user.email }, jwtSecret, {
+		const token = jwt.sign({ id: foundUser.id, email }, secret, {
 			expiresIn: "1h",
 		});
-
-		console.log("Generated token for user with email: ", email);
 
 		const responseData = {
 			items: [token],
@@ -49,7 +44,6 @@ export const login = async (req: Request, res: Response) => {
 
 		return handleSuccess(res, 200, responseData, req, "Login");
 	} catch (error) {
-		console.error(error);
 		return handleError(res, 500, error, req, "Login");
 	}
 };

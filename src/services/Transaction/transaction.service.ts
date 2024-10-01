@@ -3,10 +3,14 @@ import { TransactionServiceProps } from "./types/transactionServiceInterfaces";
 
 const TransactionService: TransactionServiceProps = {
 	async getTransactions() {
-		return await prisma.transaction.findMany();
+		return await prisma.transaction.findMany({
+			where: { deletedAt: null },
+		});
 	},
 	async getTransactionById(id) {
-		return await prisma.transaction.findUnique({ where: { id } });
+		return await prisma.transaction.findUnique({
+			where: { id: id, deletedAt: null },
+		});
 	},
 	async createTransaction(data) {
 		return await prisma.transaction.create({ data });
@@ -24,7 +28,6 @@ const TransactionService: TransactionServiceProps = {
 			dateTime: newData.dateTime ?? oldTransaction.dateTime,
 			typeId: newData.typeId ?? oldTransaction.typeId,
 			shopId: oldTransaction.shopId,
-			accountId: oldTransaction.accountId,
 			isModifiedFrom: oldTransaction.id, // Reference the old transaction
 			isModifiedTo: null, // This will be null in the new transaction initially
 		};
