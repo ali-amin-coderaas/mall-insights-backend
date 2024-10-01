@@ -2,8 +2,14 @@ import Joi from "joi";
 
 // Define the validation schemas for the various shop operations
 const shopSchemas = {
-	getAllShops: Joi.object({
+	accountId: Joi.object({
 		accountId: Joi.number().integer().required(),
+	}),
+
+	shopId: Joi.object({
+		shopId: Joi.number().integer().required(),
+	}),
+	getAllShops: Joi.object({
 		page: Joi.number().integer().min(1).default(1),
 		pageSize: Joi.number().integer().min(1).default(10),
 		searchQuery: Joi.string().allow("").optional(),
@@ -13,13 +19,7 @@ const shopSchemas = {
 		order: Joi.string().valid("ASC", "DESC").default("ASC"),
 	}),
 
-	getShopById: Joi.object({
-		shopId: Joi.number().integer().required(),
-		accountId: Joi.number().integer().required(),
-	}),
-
 	createShop: Joi.object({
-		accountId: Joi.number().integer().required(),
 		name: Joi.string().max(255).required(),
 		businessName: Joi.string().max(255).required(),
 		email: Joi.string().email().required(),
@@ -27,8 +27,6 @@ const shopSchemas = {
 	}),
 
 	updateShop: Joi.object({
-		accountId: Joi.number().integer().required(),
-		shopId: Joi.number().integer().required(),
 		data: Joi.object({
 			name: Joi.string().max(255).optional(),
 			businessName: Joi.string().max(255).optional(),

@@ -12,7 +12,7 @@ const ShopService: ShopServiceProps = {
 				},
 			},
 			orderBy: {
-				[sortBy]: order,
+				[sortBy]: order.toLocaleLowerCase(),
 			},
 			skip: (page - 1) * pageSize,
 			take: pageSize, //limit

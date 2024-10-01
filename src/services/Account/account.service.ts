@@ -3,8 +3,6 @@ import { AccountServiceProps } from "./types/accountServiceInterfaces";
 
 const AccountService: AccountServiceProps = {
 	async getAllAccounts(page, pageSize, searchQuery, sortBy, order) {
-		console.log(" get all started services");
-
 		const accounts = await prisma.account.findMany({
 			where: {
 				deletedAt: null,
@@ -13,7 +11,7 @@ const AccountService: AccountServiceProps = {
 				},
 			},
 			orderBy: {
-				[sortBy]: order,
+				[sortBy]: order.toLocaleLowerCase(),
 			},
 			skip: (page - 1) * pageSize,
 			take: pageSize, // limit

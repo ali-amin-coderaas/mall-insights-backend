@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import Joi, { Schema } from "joi";
+import { Schema } from "joi";
 import { handleError } from "../../utils/responseHelper";
 
 // Define the type for the request object key (e.g., body, params, query)
@@ -13,12 +13,11 @@ const validate = (schema: Schema, type: RequestType = "body") => {
 
 		if (error) {
 			// If there is a validation error, call the error handler
-			handleError(res, 400, error, req, "Shops");
-			return;
+			return handleError(res, 400, error, req, "JOI");
 		}
 
 		// Replace the original request[type] with the validated and sanitized value
-		req[type] = value;
+		req[type] = value as (typeof req)[RequestType];
 		// Call the next middleware
 		next();
 	};

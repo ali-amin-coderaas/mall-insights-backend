@@ -1,32 +1,36 @@
 import express from "express";
 import accountController from "../controllers/account.controller";
-import accountValidator from "../middlewares/Account/account.middleware";
+import AccountSchemas from "../middlewares/Account/account.schema";
+import validate from "../middlewares/utils/validate";
 const router = express.Router();
 
 router.get(
 	"/",
-	accountValidator.validateAccountQuery(),
+	validate(AccountSchemas.getAllAccounts, "query"),
 	accountController.getAll
 );
 router.get("/types", accountController.getAccountTypes);
 router.post(
 	"/",
-	accountValidator.validateCreateAccount(),
+	validate(AccountSchemas.createAccount, "query"),
 	accountController.create
 );
 router.get(
 	"/:accountId",
-	accountValidator.validateAccountId(),
+	validate(AccountSchemas.accountId, "params"),
+
 	accountController.getById
 );
 router.put(
 	"/:accountId",
-	accountValidator.validateUpdateAccount(),
+	validate(AccountSchemas.accountId, "params"),
+	validate(AccountSchemas.updateAccount),
+
 	accountController.update
 );
 router.delete(
 	"/:accountId",
-	accountValidator.validateAccountId(),
+	validate(AccountSchemas.accountId, "params"),
 	accountController.destroy
 );
 

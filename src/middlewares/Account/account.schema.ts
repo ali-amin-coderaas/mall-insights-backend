@@ -9,7 +9,7 @@ const AccountSchemas = {
 		order: Joi.string().valid("ASC", "DESC").default("ASC"),
 	}),
 
-	getAccountById: Joi.object({
+	accountId: Joi.object({
 		accountId: Joi.number().integer().required(),
 	}),
 
@@ -21,9 +21,7 @@ const AccountSchemas = {
 
 	updateAccount: Joi.object({
 		name: Joi.string().min(3).max(50).optional(),
-		accountType: Joi.string()
-			.valid("Personal", "Non-Profit", "Business")
-			.optional(),
+		accountId: Joi.number().integer().optional(),
 		//Other fields go here
 	}),
 };

@@ -67,9 +67,7 @@ function handleError(
 			requestId: requestId || null,
 		},
 		data: null,
-		error: {
-			message: error.message,
-		},
+		error: error,
 		meta: {
 			version: "1.0.0",
 			api: `${entityName} API`,

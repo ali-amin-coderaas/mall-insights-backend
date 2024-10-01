@@ -23,7 +23,8 @@ const TransactionService: TransactionServiceProps = {
 			amount: newData.amount ?? oldTransaction.amount,
 			dateTime: newData.dateTime ?? oldTransaction.dateTime,
 			typeId: newData.typeId ?? oldTransaction.typeId,
-			shopId: newData.shopId ?? oldTransaction.shopId,
+			shopId: oldTransaction.shopId,
+			accountId: oldTransaction.accountId,
 			isModifiedFrom: oldTransaction.id, // Reference the old transaction
 			isModifiedTo: null, // This will be null in the new transaction initially
 		};

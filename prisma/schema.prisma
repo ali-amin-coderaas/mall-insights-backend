@@ -183,6 +183,7 @@ model Transaction {
   dateTime       DateTime
   typeId         Int
   shopId         Int
+  accountId      Int
   isModifiedFrom Int?
   isModifiedTo   Int?
 

@@ -1,25 +1,24 @@
-import validate from "../utils/validate";
-import AccountSchemas from "./account.schema";
+import { NextFunction, Request, Response } from "express";
+import AccountService from "../../services/Account/account.service";
+import { handleError } from "../../utils/responseHelper";
 
-const validateAccountQuery = () => {
-	return validate(AccountSchemas.getAllAccounts, "query");
+const AccountMiddleware = {
+	async isAccountFound(req: Request, res: Response, next: NextFunction) {
+		const { accountId } = req.params;
+		const account = await AccountService.getAccountById(Number(accountId));
+
+		if (!account) {
+			return handleError(
+				res,
+				404,
+				{ message: "Account not found" },
+				req,
+				"Fetch Account"
+			);
+		}
+
+		next();
+	},
 };
 
-const validateAccountId = () => {
-	return validate(AccountSchemas.getAccountById, "params");
-};
-
-const validateCreateAccount = () => {
-	return validate(AccountSchemas.createAccount);
-};
-
-const validateUpdateAccount = () => {
-	return validate(AccountSchemas.updateAccount);
-};
-
-export default {
-	validateCreateAccount,
-	validateAccountId,
-	validateAccountQuery,
-	validateUpdateAccount,
-};
+export default AccountMiddleware;

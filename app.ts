@@ -5,6 +5,7 @@ import express from "express";
 import authenticateToken from "./src/middlewares/Auth/auth.middleware";
 import accountRouter from "./src/routes/account.route";
 import authRouter from "./src/routes/auth.route";
+import dataRouter from "./src/routes/data.route";
 import shopRouter from "./src/routes/shop.route";
 dotenv.config();
 
@@ -28,10 +29,11 @@ app.use(cors());
 
 app.use("/auth", authRouter);
 
-app.use("/accounts", authenticateToken, accountRouter);
+app.use("/accounts", accountRouter);
 
-app.use("/accounts", authenticateToken, shopRouter);
+app.use("/accounts", shopRouter);
 
+app.use("/data", dataRouter);
 app.listen(port, () => {
 	console.log(`Server is running on port ${port}`);
 });

@@ -3,7 +3,6 @@ export type User = {
 	firstName: string;
 	lastName: string;
 	email: string;
-	roleId: number;
 	password: string;
 	createdAt: Date;
 	updatedAt: Date;

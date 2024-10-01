@@ -1,6 +1,7 @@
 export interface Transaction {
 	id: number;
 	amount: number;
+	accountId: number;
 	typeId: number;
 	shopId: number;
 	isModifiedFrom: number;
@@ -18,3 +19,13 @@ export interface saleType {
 	updatedAt: Date;
 	deletedAt: Date | null;
 }
+
+export type CreateTransaction = Omit<
+	Transaction,
+	| "id"
+	| "createdAt"
+	| "updatedAt"
+	| "deletedAt"
+	| "isModifiedTo"
+	| "isModifiedFrom"
+>;

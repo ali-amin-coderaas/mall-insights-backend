@@ -6,7 +6,13 @@ const UserService: UserServiceProps = {
 		roleId = Number(roleId);
 		try {
 			const newUser = await prisma.user.create({
-				data: { firstName, lastName, roleId: roleId, email, password },
+				data: { firstName, lastName, email, password },
+			});
+			await prisma.userRole.create({
+				data: {
+					userId: newUser.id,
+					roleId: roleId,
+				},
 			});
 			return newUser;
 		} catch (error) {
