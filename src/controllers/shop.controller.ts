@@ -1,17 +1,20 @@
+import { Transaction } from "@prisma/client";
 import { Request, Response } from "express";
 import ShopService from "../services/Shop/shop.service";
+import TransactionService from "../services/Transaction/transaction.service";
+import { Order } from "../services/Transaction/types/transactionServiceInterfaces";
 import { Data } from "../types/responseInterfaces";
 import { Industry, Shop } from "../types/shopInterfaces";
 import { handleError, handleSuccess } from "../utils/responseHelper";
 
 const shopController = {
-	async getShops(req: Request, res: Response) {
+	async getAllShops(req: Request, res: Response) {
 		let { accountId } = req.params;
 		const searchQuery = (req.query.q as string) || "";
 		const page = Number(req.query.page) || 1;
 		const pageSize = Number(req.query.pageSize) || 10;
 		const sortBy = (req.query.sortBy as string) || "createdAt";
-		const order = (req.query.order as string) || "ASC";
+		const order = (req.query.order as string) || "DESC";
 
 		try {
 			const data = await ShopService.getAllShops(
@@ -70,7 +73,7 @@ const shopController = {
 			return handleError(res, 500, error, req, "Create shop");
 		}
 	},
-	async getShop(req: Request, res: Response) {
+	async getShopById(req: Request, res: Response) {
 		const { accountId, shopId } = req.params;
 		try {
 			const shop = await ShopService.getShopById(
@@ -93,7 +96,7 @@ const shopController = {
 		}
 	},
 
-	async updateShopById(req: Request, res: Response) {
+	async updateShop(req: Request, res: Response) {
 		const { shopId, accountId } = req.params;
 		const fieldsToUpdate = req.body;
 
@@ -124,7 +127,7 @@ const shopController = {
 		}
 	},
 
-	async deleteShopById(req: Request, res: Response) {
+	async deleteShop(req: Request, res: Response) {
 		const { accountId, shopId } = req.params;
 		try {
 			const result = await ShopService.deleteShop(
@@ -160,6 +163,53 @@ const shopController = {
 			return handleSuccess(res, 200, responseData, req, "Shops  by industry");
 		} catch (error) {
 			return handleError(res, 500, error, req, "Shops  by industry");
+		}
+	},
+
+	async getShopTransactions(req: Request, res: Response) {
+		let accountId: number = Number(req.params.accountId);
+		let shopId: number = Number(req.params.shopId);
+		let startDate = new Date(req.query.startDate as string);
+		let endDate = new Date(req.query.endDate as string);
+		const page = Number(req.query.page) || 1;
+		const pageSize = Number(req.query.pageSize) || 10;
+		const sortBy = (req.query.sortBy as string) || "dateTime";
+		const order = (req.query.order as Order) || "DESC";
+		const q = (req.query.q as string) || "";
+
+		try {
+			const data = await TransactionService.getTransactions({
+				accountId,
+				shopId,
+				startDate,
+				endDate,
+				page,
+				pageSize,
+				sortBy,
+				order,
+				q,
+			});
+			const { transactions, totalItems } = data;
+			const paginatation = {
+				currentPage: page,
+				pageSize: pageSize,
+				totalItems,
+				totalPages: Math.ceil(totalItems / pageSize),
+			};
+			const responseData: Data<Transaction> = {
+				items: transactions,
+				pagination: paginatation,
+				links: null,
+			};
+			return handleSuccess(
+				res,
+				200,
+				responseData,
+				req,
+				"Fetch Account Transactions"
+			);
+		} catch (error) {
+			return handleError(res, 500, error, req, "Fetch Account Transactions");
 		}
 	},
 };

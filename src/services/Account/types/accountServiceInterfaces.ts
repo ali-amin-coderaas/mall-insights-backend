@@ -4,14 +4,11 @@ import {
 	AccountType,
 	CreateAccount,
 } from "../../../types/accountInterfaces";
+import { QueryFilters } from "../../../types/queryInterfaces";
 
 export type AccountServiceProps = {
 	getAllAccounts: (
-		page: number,
-		pageSize: number,
-		searchQuery: string,
-		sortBy: string,
-		order: string
+		filters: QueryFilters
 	) => Promise<{ accounts: Account[]; totalItems: number }>;
 	getAccountById: (id: number) => Promise<Account | null>;
 	createAccount: (data: CreateAccount) => Promise<Account>;

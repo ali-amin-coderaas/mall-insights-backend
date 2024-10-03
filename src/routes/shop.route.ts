@@ -11,7 +11,7 @@ router.get(
 	AccountMiddleware.isAccountFound,
 	validate(shopSchemas.accountId, "params"),
 	validate(shopSchemas.getAllShops, "query"),
-	shopController.getShops
+	shopController.getAllShops
 );
 router.get("/industries", shopController.getShopIndustries);
 
@@ -20,7 +20,7 @@ router.get(
 	AccountMiddleware.isAccountFound,
 
 	validate(shopSchemas.getShop, "params"),
-	shopController.getShop
+	shopController.getShopById
 );
 router.post(
 	"/:accountId/shops",
@@ -36,14 +36,14 @@ router.put(
 	validate(shopSchemas.accountId, "params"),
 	validate(shopSchemas.getShop, "params"),
 	validate(shopSchemas.updateShop, "params"),
-	shopController.updateShopById
+	shopController.updateShop
 );
 router.delete(
 	"/:accountId/shops/:shopId",
 	AccountMiddleware.isAccountFound,
 	validate(shopSchemas.accountId, "params"),
 	validate(shopSchemas.shopId, "params"),
-	shopController.deleteShopById
+	shopController.deleteShop
 );
 
 export default router;

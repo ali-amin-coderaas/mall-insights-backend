@@ -2,10 +2,35 @@ import { prisma } from "../config";
 import { TransactionServiceProps } from "./types/transactionServiceInterfaces";
 
 const TransactionService: TransactionServiceProps = {
-	async getTransactions() {
-		return await prisma.transaction.findMany({
-			where: { deletedAt: null },
+	async getTransactions(filters) {
+		const transactions = await prisma.transaction.findMany({
+			where: {
+				deletedAt: null,
+				...(filters.startDate &&
+					filters.endDate && {
+						dateTime: { gte: filters.startDate, lte: filters.endDate },
+					}),
+				...(filters.shopId && { id: filters.shopId }),
+				...(filters.accountId && { shop: { accountId: filters.accountId } }),
+			},
+			orderBy: {
+				[filters.sortBy]: filters.order?.toLocaleLowerCase(),
+			},
 		});
+
+		const totalItems = await prisma.transaction.count({
+			where: {
+				deletedAt: null,
+				...(filters.startDate &&
+					filters.endDate && {
+						dateTime: { gte: filters.startDate, lte: filters.endDate },
+					}),
+				...(filters.shopId && { id: filters.shopId }),
+				...(filters.accountId && { shop: { accountId: filters.accountId } }),
+			},
+		});
+
+		return { transactions, totalItems };
 	},
 	async getTransactionById(id) {
 		return await prisma.transaction.findUnique({

@@ -5,13 +5,13 @@ import { handleError, handleSuccess } from "../utils/responseHelper";
 const dataController = {
 	async getAccountTransactions(req: Request, res: Response) {
 		const { accountId } = req.params;
-		const { fromDate, toDate } = req.query;
+		const { startDate, endDate } = req.query;
 
 		try {
 			const transactions = await dataService.getAccountTransactions(
 				Number(accountId),
-				new Date(fromDate as string),
-				new Date(toDate as string)
+				new Date(startDate as string),
+				new Date(endDate as string)
 			);
 
 			const responseData = {
@@ -34,14 +34,14 @@ const dataController = {
 
 	async getShopTransactions(req: Request, res: Response) {
 		const { accountId, shopId } = req.params;
-		const { fromDate, toDate } = req.query;
+		const { startDate, endDate } = req.query;
 
 		try {
 			const transactions = await dataService.getShopTransactions(
 				Number(accountId),
 				Number(shopId),
-				new Date(fromDate as string),
-				new Date(toDate as string)
+				new Date(startDate as string),
+				new Date(endDate as string)
 			);
 
 			const responseData = {

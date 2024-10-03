@@ -24,7 +24,7 @@ const UserService: UserServiceProps = {
 	async findUserByEmail(email) {
 		try {
 			const user = await prisma.user.findFirst({
-				where: { email },
+				where: { deletedAt: null, email },
 			});
 			if (!user) {
 				throw new Error(`User not found with email: ${email}`);

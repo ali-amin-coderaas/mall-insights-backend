@@ -3,8 +3,8 @@ import { prisma } from "../config";
 const DataServices = {
 	async getAccountTransactions(
 		accountId: number,
-		fromDate: Date,
-		toDate: Date
+		startDate: Date,
+		endDate: Date
 	) {
 		return await prisma.transaction.findMany({
 			where: {
@@ -12,8 +12,8 @@ const DataServices = {
 					accountId: accountId,
 				},
 				dateTime: {
-					gte: fromDate,
-					lte: toDate,
+					gte: startDate,
+					lte: endDate,
 				},
 			},
 		});
@@ -22,8 +22,8 @@ const DataServices = {
 	async getShopTransactions(
 		shopId: number,
 		accountId: number,
-		fromDate: Date,
-		toDate: Date
+		startDate: Date,
+		endDate: Date
 	) {
 		return await prisma.transaction.findMany({
 			where: {
@@ -32,8 +32,8 @@ const DataServices = {
 				},
 				shopId: shopId,
 				dateTime: {
-					gte: fromDate,
-					lte: toDate,
+					gte: startDate,
+					lte: endDate,
 				},
 			},
 		});

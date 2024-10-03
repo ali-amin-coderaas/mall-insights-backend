@@ -1,4 +1,4 @@
-export interface SuccessResponse<T> {
+export interface Response {
 	status: {
 		code: number;
 		message: string;
@@ -7,8 +7,6 @@ export interface SuccessResponse<T> {
 		method: string;
 		requestId: string | null;
 	};
-	data: Data<T>;
-	error: null;
 	meta: {
 		version: string;
 		api: string;
@@ -17,24 +15,15 @@ export interface SuccessResponse<T> {
 	};
 }
 
-export interface ErrorResponse {
-	status: {
-		code: number;
-		message: string;
-		timestamp: string;
-		path: string;
-		method: string;
-		requestId: string | null;
-	};
+export interface SuccessResponse<T> extends Response {
+	data: Data<T>;
+	error: null;
+}
+
+export interface ErrorResponse extends Response {
 	data: null;
 	error: {
 		message: string;
-	};
-	meta: {
-		version: string;
-		api: string;
-		environment: string;
-		executionTime: string;
 	};
 }
 

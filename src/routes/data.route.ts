@@ -4,14 +4,13 @@ import AccountMiddleware from "../middlewares/Account/account.middleware";
 const router = express.Router();
 
 router.get(
-	"/transactions/accounts/:accountId",
+	"/accounts/:accountId/sales",
 	AccountMiddleware.isAccountFound,
-
 	dataController.getAccountTransactions
 );
 
 router.get(
-	"/transactions/accounts/:accountId/shops/:shopId",
+	"/accounts/:accountId/shops/:shopId/sales",
 	AccountMiddleware.isAccountFound,
 
 	dataController.getShopTransactions

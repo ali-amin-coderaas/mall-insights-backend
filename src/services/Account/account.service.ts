@@ -2,24 +2,25 @@ import { prisma } from "../config";
 import { AccountServiceProps } from "./types/accountServiceInterfaces";
 
 const AccountService: AccountServiceProps = {
-	async getAllAccounts(page, pageSize, searchQuery, sortBy, order) {
+	async getAllAccounts(filters) {
 		const accounts = await prisma.account.findMany({
 			where: {
 				deletedAt: null,
 				name: {
-					contains: searchQuery,
+					contains: filters.q,
 				},
 			},
 			orderBy: {
-				[sortBy]: order.toLocaleLowerCase(),
+				[filters.sortBy]: filters.order.toLocaleLowerCase(),
 			},
-			skip: (page - 1) * pageSize,
-			take: pageSize, // limit
+			skip: (filters.page - 1) * filters.pageSize,
+			take: filters.pageSize, // limit
 		});
 		const totalItems = await prisma.account.count({
 			where: {
+				deletedAt: null,
 				name: {
-					contains: searchQuery,
+					contains: filters.q,
 				},
 			},
 		});
