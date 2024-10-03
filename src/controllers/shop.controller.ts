@@ -2,7 +2,10 @@ import { Transaction } from "@prisma/client";
 import { Request, Response } from "express";
 import ShopService from "../services/Shop/shop.service";
 import TransactionService from "../services/Transaction/transaction.service";
-import { Order } from "../services/Transaction/types/transactionServiceInterfaces";
+import {
+	Order,
+	TransactionQueryType,
+} from "../services/Transaction/types/transactionServiceInterfaces";
 import { Data } from "../types/responseInterfaces";
 import { Industry, Shop } from "../types/shopInterfaces";
 import { handleError, handleSuccess } from "../utils/responseHelper";
@@ -167,7 +170,7 @@ const shopController = {
 	},
 
 	async getShopTransactions(req: Request, res: Response) {
-		let accountId: number = Number(req.params.accountId);
+		// let accountId: number = Number(req.params.accountId);
 		let shopId: number = Number(req.params.shopId);
 		let startDate = new Date(req.query.startDate as string);
 		let endDate = new Date(req.query.endDate as string);
@@ -176,10 +179,11 @@ const shopController = {
 		const sortBy = (req.query.sortBy as string) || "dateTime";
 		const order = (req.query.order as Order) || "DESC";
 		const q = (req.query.q as string) || "";
+		const type = (req.query.type as TransactionQueryType) || "raw";
 
 		try {
 			const data = await TransactionService.getTransactions({
-				accountId,
+				// accountId,
 				shopId,
 				startDate,
 				endDate,
@@ -188,6 +192,7 @@ const shopController = {
 				sortBy,
 				order,
 				q,
+				type,
 			});
 			const { transactions, totalItems } = data;
 			const paginatation = {
@@ -210,6 +215,38 @@ const shopController = {
 			);
 		} catch (error) {
 			return handleError(res, 500, error, req, "Fetch Account Transactions");
+		}
+	},
+
+	async verifyMonthlySales(req: Request, res: Response) {
+		const { shopId } = req.params;
+		const { count, startDate, endDate } = req.body;
+
+		try {
+			const result = await ShopService.verifyMonthlySales(
+				Number(shopId),
+				count,
+				startDate,
+				endDate
+			);
+
+			const message = result
+				? "Sales verified successfully"
+				: "Sales verification failed";
+
+			return handleSuccess(
+				res,
+				200,
+				{
+					items: [{ value: result, message }],
+					pagination: null,
+					links: null,
+				},
+				req,
+				"Verify Shop Sales"
+			);
+		} catch (error) {
+			return handleError(res, 500, error, req, "Verify Shop Sales");
 		}
 	},
 };

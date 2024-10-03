@@ -23,6 +23,13 @@ router.get(
 	shopController.getShopById
 );
 router.post(
+	"/:accountId/shops/:shopId/monthly",
+	AccountMiddleware.isAccountFound,
+	validate(shopSchemas.accountId, "params"),
+	validate(shopSchemas.getShop, "params"),
+	shopController.verifyMonthlySales
+);
+router.post(
 	"/:accountId/shops",
 	AccountMiddleware.isAccountFound,
 	validate(shopSchemas.accountId, "params"),

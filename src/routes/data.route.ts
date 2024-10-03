@@ -1,19 +1,13 @@
 import express from "express";
-import dataController from "../controllers/data.controller";
-import AccountMiddleware from "../middlewares/Account/account.middleware";
+import AccountController from "../controllers/account.controller";
+import shopController from "../controllers/shop.controller";
 const router = express.Router();
 
 router.get(
 	"/accounts/:accountId/sales",
-	AccountMiddleware.isAccountFound,
-	dataController.getAccountTransactions
+	AccountController.getAccountTransactions
 );
 
-router.get(
-	"/accounts/:accountId/shops/:shopId/sales",
-	AccountMiddleware.isAccountFound,
-
-	dataController.getShopTransactions
-);
+router.get("/shops/:shopId/sales", shopController.getShopTransactions);
 
 export default router;

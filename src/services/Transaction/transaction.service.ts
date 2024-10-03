@@ -75,6 +75,20 @@ const TransactionService: TransactionServiceProps = {
 			data: { deletedAt: new Date() },
 		});
 	},
+
+	async getTransactionCount(filters) {
+		return await prisma.transaction.count({
+			where: {
+				deletedAt: null,
+				...(filters.startDate &&
+					filters.endDate && {
+						dateTime: { gte: filters.startDate, lte: filters.endDate },
+					}),
+				...(filters.shopId && { id: filters.shopId }),
+				...(filters.accountId && { shop: { accountId: filters.accountId } }),
+			},
+		});
+	},
 };
 
 export default TransactionService;

@@ -1,4 +1,3 @@
-import QueryString from "qs";
 import { CreateShop, Industry, Shop } from "../../../types/shopInterfaces";
 
 export type ShopServiceProps = {
@@ -19,4 +18,10 @@ export type ShopServiceProps = {
 	deleteShop(accountId: number, shopId: number): Promise<Shop>;
 
 	getIndustries(): Promise<Industry[]>;
+	verifyMonthlySales(
+		shopId: number,
+		inputCount: number,
+		startDate: Date,
+		endDate: Date
+	): Promise<boolean>;
 };

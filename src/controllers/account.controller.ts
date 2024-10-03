@@ -2,7 +2,10 @@ import { Transaction } from "@prisma/client";
 import { Request, Response } from "express";
 import AccountService from "../services/Account/account.service";
 import TransactionService from "../services/Transaction/transaction.service";
-import { Order } from "../services/Transaction/types/transactionServiceInterfaces";
+import {
+	Order,
+	TransactionQueryType,
+} from "../services/Transaction/types/transactionServiceInterfaces";
 import { Account } from "../types/accountInterfaces";
 import { Data } from "../types/responseInterfaces";
 import { handleError, handleSuccess } from "../utils/responseHelper";
@@ -183,6 +186,7 @@ const AccountController = {
 		const sortBy = (req.query.sortBy as string) || "dateTime";
 		const order = (req.query.order as Order) || "DESC";
 		const q = (req.query.q as string) || "";
+		const type = (req.query.type as TransactionQueryType) || "raw";
 
 		try {
 			const data = await TransactionService.getTransactions({
@@ -194,6 +198,7 @@ const AccountController = {
 				sortBy,
 				order,
 				q,
+				type,
 			});
 			const { transactions, totalItems } = data;
 			const paginatation = {

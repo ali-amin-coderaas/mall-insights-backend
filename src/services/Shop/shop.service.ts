@@ -1,4 +1,5 @@
 import { prisma } from "../config";
+import TransactionService from "../Transaction/transaction.service";
 import { ShopServiceProps } from "./types/shopServiceInterfaces";
 
 const ShopService: ShopServiceProps = {
@@ -71,6 +72,16 @@ const ShopService: ShopServiceProps = {
 
 	async getIndustries() {
 		return await prisma.shopIndustry.findMany();
+	},
+
+	async verifyMonthlySales(shopId, inputCount, startDate, endDate) {
+		const storedCount = await TransactionService.getTransactionCount({
+			shopId,
+			startDate,
+			endDate,
+		});
+
+		return storedCount === inputCount;
 	},
 };
 
